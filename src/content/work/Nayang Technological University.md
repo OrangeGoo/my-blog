@@ -5,4 +5,6 @@ dateStart: "07/12/2022"
 dateEnd: "09/3/2022"
 ---
 
-Lorem ipsum dolor, sit amet consectetur adipisicing elit. Iure illo neque tempora, voluptatem est quaerat voluptas praesentium ipsa dolorem dignissimos nulla ratione distinctio quae maiores eligendi nostrum? Quibusdam, debitis voluptatum.
+* Built a pneumonia image detection app with **Django** for the REST API and **React** for the frontend
+* Utilized **Python** to invoke four separate **CNN** models, allowing users to choose from multiple detection methods.
+* Stored the models in the **AWS S3** and deployed the projects on **Vercel**.
