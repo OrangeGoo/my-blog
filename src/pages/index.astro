@@ -1,149 +1,66 @@
 ---
-import { getCollection } from "astro:content";
-import Container from "@components/Container.astro";
 import PageLayout from "@layouts/PageLayout.astro";
-import ArrowCard from "@components/ArrowCard.astro";
-import Link from "@components/Link.astro";
-import { dateRange } from "@lib/utils";
-import { SITE, HOME, SOCIALS } from "@consts";
+import { HOME, SITE, SOCIALS } from "@consts";
+import "@/styles/global.css";
+import { Typewriter } from "@components/Typewriter";
+import {
+  GitHubLogoIcon,
+  LinkedInLogoIcon,
+  EnvelopeClosedIcon,
+} from "@radix-ui/react-icons";
+import { Button } from "@components/ui/button";
 
-const blog = (await getCollection("blog"))
-  .filter(post => !post.data.draft)
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-  .slice(0,SITE.NUM_POSTS_ON_HOMEPAGE);
-
-const projects = (await getCollection("projects"))
-  .filter(project => !project.data.draft)
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-  .slice(0,SITE.NUM_PROJECTS_ON_HOMEPAGE);
-
-const allwork = (await getCollection("work"))
-  .sort((a, b) => new Date(b.data.dateStart).valueOf() - new Date(a.data.dateStart).valueOf())
-  .slice(0,SITE.NUM_WORKS_ON_HOMEPAGE);
-
-const work = await Promise.all(
-  allwork.map(async (item) => {
-    const { Content } = await item.render();
-    return { ...item, Content };
-  })
-);
-
+const descriptiveStatements: string[] = [
+  "I am a Graduate Student in Computer Engineering at Columbia University.",
+  "My tech stack primarily consists of JavaScript/TypeScript(MERN), Java(Spring), Python(Django).",
+  "I love crafting delightful user experience and wonderful things.",
+  "Now, i'm actively seeking remote SDE intern positions and 2025 SDE Summer Internship opportunities.",
+];
 ---
 
 <PageLayout title={HOME.TITLE} description={HOME.DESCRIPTION}>
-  <Container>
-    <h4 class="animate font-semibold text-black dark:text-white">
-      Hi, I'm Jiacheng Gu <span class="text-xl">👋🏻</span>
-    </h4>
-    <div class="space-y-16">
-      <section>
-        <article class="space-y-4">
-          <p class="animate">
-            📖 I am a Graduate Student in Computer Engineering at Columbia University.
-          </p>
-          <p class="animate">
-            🔭 My tech stack primarily consists of JavaScript/TypeScript(MERN), Java(Spring), Python(Django).
-          </p>
-          <p class="animate">
-            ⭐️ I love crafting delightful user experience and wonderful things.
-          </p>
-          <p class="animate">
-            💼 Now, i'm actively seeking remote SDE intern positions and 2025 SDE Summer Internship opportunities.
-          </p>
-        </article>
-      </section>
-
-      <section class="animate space-y-6">
-        <div class="flex flex-wrap gap-y-2 items-center justify-between">
-          <h5 class="font-semibold text-black dark:text-white">
-            Latest posts
-          </h5>
-          <Link href="/blog">
-            See all posts
-          </Link>
-        </div>
-        <ul class="flex flex-col gap-4">
-          {blog.map(post => (
-            <li>
-              <ArrowCard entry={post} />
-            </li>
-          ))}
-        </ul>
-      </section>
-
-      <section class="animate space-y-6">
-        <div class="flex flex-wrap gap-y-2 items-center justify-between">
-          <h5 class="font-semibold text-black dark:text-white">
-            Work Experience
-          </h5>
-          <Link href="/work">
-            See all work
-          </Link>
-        </div>
-        <ul class="flex flex-col space-y-4">
-          {work.map(entry => (
-            <li>
-              <div class="text-sm opacity-75">
-                {dateRange(entry.data.dateStart, entry.data.dateEnd)}
-              </div>
-              <div class="font-semibold text-black dark:text-white">
-                {entry.data.company}
-              </div>
-              <div class="text-sm opacity-75">
-                {entry.data.role}
-              </div>
-              <article>
-                <entry.Content />
-              </article>
-            </li>
-          ))}
-        </ul>
-      </section>
-
-      <section class="animate space-y-6">
-        <div class="flex flex-wrap gap-y-2 items-center justify-between">
-          <h5 class="font-semibold text-black dark:text-white">
-            Recent projects
-          </h5>
-          <Link href="/projects">
-            See all projects
-          </Link>
-        </div>
-        <ul class="flex flex-col gap-4">
-          {projects.map(project => (
-            <li>
-              <ArrowCard entry={project} />
-            </li>
-          ))}
-        </ul>
-      </section>
-
-      <section class="animate space-y-4">
-        <h5 class="font-semibold text-black dark:text-white">
-          Let's Connect
-        </h5>
-        <article>
-          <p>
-            If you want to get in touch with me about something or just to say hi,
-            reach out on social media or send me an email.
-          </p>
-        </article>
+  <div class="animate flex flex-col justify-center">
+    <main class="flex px-4 py-16 flex-col items-center">
+      <div class="mt-12 md:mt-24 mb-6 md:mb-12 text-4xl md:text-6xl font-bold">
+        👋&nbsp;&nbsp;Hi, I&apos;m Jiacheng Gu
+      </div>
+      <Typewriter client:load snippets={descriptiveStatements} />
+      <section class="animate space-y-4 mt-20">
         <ul class="flex flex-wrap gap-2">
-          {SOCIALS.map(SOCIAL => (
-            <li class="flex gap-x-2 text-nowrap">
-              <Link href={SOCIAL.HREF} external aria-label={`${SITE.NAME} on ${SOCIAL.NAME}`}>
-                {SOCIAL.NAME}
-              </Link>
-              {"/"}
-            </li>
-          ))}
+          {
+            SOCIALS.map((SOCIAL) => (
+              <li class="flex gap-x-2 text-nowrap">
+                {SOCIAL.NAME === "github" ? (
+                  <a href="https://github.com/OrangeGoo" target="_blank">
+                    <Button className="flex items-center space-x-2">
+                      <GitHubLogoIcon />
+                      <span>Github</span>
+                    </Button>
+                  </a>
+                ) : (
+                  <a
+                    href="https://linkedin.com/in/jiacheng-gu-034054325"
+                    target="_blank"
+                  >
+                    <Button className="flex items-center space-x-2">
+                      <LinkedInLogoIcon />
+                      <span>LinkedIn</span>
+                    </Button>
+                  </a>
+                )}
+              </li>
+            ))
+          }
           <li class="line-clamp-1">
-            <Link href={`mailto:${SITE.EMAIL}`} aria-label={`Email ${SITE.NAME}`}>
-              {SITE.EMAIL}
-            </Link>
+            <a href=`mailto:${SITE.EMAIL}`>
+              <Button className="flex items-center space-x-2">
+                <EnvelopeClosedIcon />
+                <span>Email</span>
+              </Button>
+            </a>
           </li>
         </ul>
       </section>
-    </div>
-  </Container>
+    </main>
+  </div>
 </PageLayout>
