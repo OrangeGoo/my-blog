@@ -21,10 +21,14 @@ const descriptiveStatements: string[] = [
 <PageLayout title={HOME.TITLE} description={HOME.DESCRIPTION}>
   <div class="animate flex flex-col justify-center">
     <main class="flex px-4 py-16 flex-col items-center">
-      <div class="mt-12 md:mt-24 mb-6 md:mb-12 text-4xl md:text-6xl font-bold">
+      <div
+        class="mt-12 md:mt-24 mb-6 md:mb-12 text-4xl md:text-6xl font-bold text-center"
+      >
         👋&nbsp;&nbsp;Hi, I&apos;m Jiacheng Gu
       </div>
-      <Typewriter client:load snippets={descriptiveStatements} />
+      <div class="w-full max-w-2xl h-4 text-center">
+        <Typewriter client:load snippets={descriptiveStatements} />
+      </div>
       <section class="animate space-y-4 mt-20">
         <ul class="flex flex-wrap gap-2">
           {
