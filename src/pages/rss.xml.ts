@@ -3,18 +3,43 @@ import { getCollection } from "astro:content";
 import { HOME } from "@consts";
 
 type Context = {
-  site: string
-}
+  site: string;
+};
 
 export async function GET(context: Context) {
-  const blog = (await getCollection("blog"))
-  .filter(post => !post.data.draft);
+  interface BlogPost {
+    data: {
+      draft: boolean;
+      title: string;
+      description: string;
+      date: string;
+    };
+    collection: string;
+    slug: string;
+  }
 
-  const projects = (await getCollection("projects"))
-    .filter(project => !project.data.draft);
+  const blog: BlogPost[] = (await getCollection("blog")).filter(
+    (post: BlogPost) => !post.data.draft
+  );
 
-  const items = [...blog, ...projects]
-    .sort((a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf());
+  interface Project {
+    data: {
+      draft: boolean;
+      title: string;
+      description: string;
+      date: string;
+    };
+    collection: string;
+    slug: string;
+  }
+
+  const projects: Project[] = (await getCollection("projects")).filter(
+    (project: Project) => !project.data.draft
+  );
+
+  const items = [...blog, ...projects].sort(
+    (a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf()
+  );
 
   return rss({
     title: HOME.TITLE,
@@ -23,7 +48,7 @@ export async function GET(context: Context) {
     items: items.map((item) => ({
       title: item.data.title,
       description: item.data.description,
-      pubDate: item.data.date,
+      pubDate: new Date(item.data.date),
       link: `/${item.collection}/${item.slug}/`,
     })),
   });
