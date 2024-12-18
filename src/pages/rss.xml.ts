@@ -7,34 +7,10 @@ type Context = {
 };
 
 export async function GET(context: Context) {
-  interface BlogPost {
-    data: {
-      draft: boolean;
-      title: string;
-      description: string;
-      date: string;
-    };
-    collection: string;
-    slug: string;
-  }
+  const blog = (await getCollection("blog")).filter((post) => !post.data.draft);
 
-  const blog: BlogPost[] = (await getCollection("blog")).filter(
-    (post: BlogPost) => !post.data.draft
-  );
-
-  interface Project {
-    data: {
-      draft: boolean;
-      title: string;
-      description: string;
-      date: string;
-    };
-    collection: string;
-    slug: string;
-  }
-
-  const projects: Project[] = (await getCollection("projects")).filter(
-    (project: Project) => !project.data.draft
+  const projects = (await getCollection("projects")).filter(
+    (project) => !project.data.draft
   );
 
   const items = [...blog, ...projects].sort(
@@ -48,7 +24,7 @@ export async function GET(context: Context) {
     items: items.map((item) => ({
       title: item.data.title,
       description: item.data.description,
-      pubDate: new Date(item.data.date),
+      pubDate: item.data.date,
       link: `/${item.collection}/${item.slug}/`,
     })),
   });
